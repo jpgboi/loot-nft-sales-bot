@@ -1,23 +1,12 @@
 {
-  "name": "sales-bot",
+  "name": "loot-nft-sales-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn ./src/index.ts",
     "start": "ts-node ./src/index.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jpgboi/sales-bot.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jpgboi/sales-bot/issues"
-  },
-  "homepage": "https://github.com/jpgboi/sales-bot#readme",
+  "author": "jpgboi <jpgboi@protonmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^16.7.5",
     "ts-node": "^10.2.1",
