@@ -24,4 +24,5 @@ export interface Message {
   usd: string
   eth: string
   loot: Loot
+  rarest?: string
 }

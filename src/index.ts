@@ -6,6 +6,7 @@ import fetch from 'node-fetch'
 import abi from './abi.json'
 import { sendDiscordMessage } from './discord'
 import lootList from './loot.json'
+import rareList from './rare.json'
 import { CoinbaseData, Loot, Message } from './types'
 
 const rpc = new providers.JsonRpcProvider(process.env.PROVIDER_URL)
@@ -24,6 +25,7 @@ async function main() {
       if (value.gt(0)) {
         const tokenId = tokenIdBN.toString()
         const loot: Loot = lootList[tokenId]
+        // const rarest = rareList[tokenId].toString()
 
         // get prices
         const eth = utils.formatEther(value)
@@ -37,6 +39,7 @@ async function main() {
           eth,
           usd,
           loot,
+          // rarest,
         }
         sendDiscordMessage(message)
       }
