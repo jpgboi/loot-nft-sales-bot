@@ -16,3 +16,12 @@ export interface CoinbaseData {
     amount: string
   }
 }
+
+export interface Message {
+  from: string
+  to: string
+  tokenId: string
+  usd: string
+  eth: string
+  loot: Loot
+}

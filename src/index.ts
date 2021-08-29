@@ -1,45 +1,55 @@
 import dotenv from 'dotenv'
+dotenv.config() // make sure this is loaded first
+
 import { BigNumber, Contract, Event, providers, utils } from 'ethers'
 import fetch from 'node-fetch'
 import abi from './abi.json'
+import { sendDiscordMessage } from './discord'
 import lootList from './loot.json'
-import { CoinbaseData, Loot } from './types'
-
-dotenv.config()
+import { CoinbaseData, Loot, Message } from './types'
 
 const rpc = new providers.JsonRpcProvider(process.env.PROVIDER_URL)
 const contract = new Contract(process.env.CONTRACT_ADDRESS, abi, rpc)
 
 async function main() {
-  console.log('listening')
+  console.log('🚀 Listening for sales...')
 
   contract.on(
     'Transfer',
-    async (from: string, to: string, tokenId: BigNumber, event: Event) => {
+    async (from: string, to: string, tokenIdBN: BigNumber, event: Event) => {
       const { value } = await event.getTransaction()
-      console.log({ from, to, tokenId, value })
 
       // make sure it was a sale and not just a transfer
-      if (value.gte(0)) {
+      // by checking if value is greater than 0
+      if (value.gt(0)) {
+        const tokenId = tokenIdBN.toString()
+        const loot: Loot = lootList[tokenId]
+
+        // get prices
         const eth = utils.formatEther(value)
-        const usd = (parseFloat(eth) * (await getEthUsd())).toLocaleString()
-        const token = tokenId.toString()
+        const usd = await getEthUsd(parseFloat(eth))
 
-        console.log(`Bag #${token}\nBought for ${eth} ETH ($${usd})`)
-
-        const loot: Loot = lootList[token]
-        console.log({ token, loot })
+        console.log('Sale: ', { from, to, tokenId, eth, usd, loot })
+        const message: Message = {
+          from,
+          to,
+          tokenId,
+          eth,
+          usd,
+          loot,
+        }
+        sendDiscordMessage(message)
       }
     },
   )
 }
 
-const getEthUsd = async () => {
+const getEthUsd = async (eth: number) => {
   const response = await fetch('https://api.coinbase.com/v2/prices/ETH-USD/buy')
   const {
     data: { amount },
   }: CoinbaseData = await response.json()
-  return parseInt(amount)
+  return (eth * parseInt(amount)).toLocaleString()
 }
 
 main()
