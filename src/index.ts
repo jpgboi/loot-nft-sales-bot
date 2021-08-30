@@ -8,6 +8,14 @@ import { sendDiscordMessage } from './discord'
 import lootList from './loot.json'
 import { CoinbaseData, Loot, Message } from './types'
 
+if (!process.env.PROVIDER_URL) {
+  throw new Error('Missing `PROVIDER_URL`')
+}
+
+if (!process.env.CONTRACT_ADDRESS) {
+  throw new Error('Missing `CONTRACT_ADDRESS`')
+}
+
 const rpc = new providers.JsonRpcProvider(process.env.PROVIDER_URL)
 const contract = new Contract(process.env.CONTRACT_ADDRESS, abi, rpc)
 

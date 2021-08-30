@@ -4,7 +4,7 @@ import { Message } from './types'
 const url = process.env.DISCORD_WEBHOOK_URL
 
 if (!url) {
-  throw new Error('No `DISCORD_WEBHOOK_URL` provided')
+  throw new Error('Missing `DISCORD_WEBHOOK_URL`')
 }
 
 const webhookClient = new WebhookClient({ url })
