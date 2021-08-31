@@ -30,7 +30,7 @@ async function rarityImageBuffer(items: string[]): Promise<Buffer> {
   const dataUriImage = imageRarityFromItems(items)
   const svg = tweakSvgColors(decodeURIComponent(dataUriImage).split(',')[1])
   return new Promise((resolve, reject) => {
-    svg2img(svg, { width: 350, height: 350 }, (err, data) => {
+    svg2img(svg, { width: 1000, height: 1000 }, (err, data) => {
       if (err) reject(err)
       else resolve(data)
     })

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts",
+    "test": "ts-node ./src/test.ts"
   },
   "author": "jpgboi <jpgboi@protonmail.com>",
   "license": "MIT",
