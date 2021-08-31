@@ -28,3 +28,21 @@ sendDiscordMessage({
     weapon: 'Maul',
   },
 })
+
+sendDiscordMessage({
+  from: '0xd8C5b21d28101E482c68B54d0D5ED62D9C3B824d',
+  to: '0xE72EB31b59F85b19499A0F3b3260011894FA0d65',
+  tokenId: '1579',
+  eth: '5.0',
+  usd: '16,950',
+  loot: {
+    chest: 'Linen Robe',
+    foot: '"Victory Grasp" Shoes of Brilliance +1',
+    hand: '"Havoc Whisper" Ornate Gauntlets of Fury',
+    head: 'Linen Hood',
+    neck: 'Amulet',
+    ring: 'Titanium Ring',
+    waist: '"Kraken Grasp" Hard Leather Belt of the Twins +1',
+    weapon: 'Long Sword',
+  },
+})
