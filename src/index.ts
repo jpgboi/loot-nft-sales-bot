@@ -68,7 +68,6 @@ const getEthUsd = async (eth: number) => {
     console.log(e)
     process.exit(-1)
   }
-  process.exit()
 })()
 
 http
