@@ -60,4 +60,12 @@ const getEthUsd = async (eth: number) => {
   return (eth * parseInt(amount)).toLocaleString()
 }
 
-main()
+;(async () => {
+  try {
+    await main()
+  } catch (e) {
+    console.log(e)
+    process.exit(-1)
+  }
+  process.exit()
+})()
