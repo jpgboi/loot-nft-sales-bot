@@ -5,8 +5,8 @@ import {
 } from 'discord.js'
 import { imageRarityFromItems } from 'loot-rarity'
 import svg2img from 'svg2img'
-
 import { Message } from './types'
+import './load-font'
 
 const url = process.env.DISCORD_WEBHOOK_URL
 
