@@ -7,6 +7,7 @@ import abi from './abi.json'
 import { sendDiscordMessage } from './discord'
 import lootList from './loot.json'
 import { CoinbaseData, Loot, Message } from './types'
+import http from 'http'
 
 if (!process.env.PROVIDER_URL) {
   throw new Error('Missing `PROVIDER_URL`')
@@ -60,12 +61,12 @@ const getEthUsd = async (eth: number) => {
   return (eth * parseInt(amount)).toLocaleString()
 }
 
-;(async () => {
-  try {
-    await main()
-  } catch (e) {
-    console.log(e)
-    process.exit(-1)
-  }
-  process.exit()
-})()
+http
+  .createServer(async (req, res) => {
+    try {
+      await main()
+    } catch (e) {
+      console.log(e)
+    }
+  })
+  .listen(process.env.PORT || 3001)
