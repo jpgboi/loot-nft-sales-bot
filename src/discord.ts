@@ -46,7 +46,16 @@ export const sendDiscordMessage = async ({
   usd,
 }: Message) => {
   const attachment = new MessageAttachment(
-    await rarityImageBuffer(Object.values(loot)),
+    await rarityImageBuffer([
+      loot.weapon,
+      loot.chest,
+      loot.head,
+      loot.waist,
+      loot.foot,
+      loot.hand,
+      loot.neck,
+      loot.ring,
+    ]),
     'loot.png',
   )
 
