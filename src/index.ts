@@ -37,7 +37,6 @@ async function main() {
         const eth = utils.formatEther(value)
         const usd = await getEthUsd(parseFloat(eth))
 
-        console.log('Sale: ', { from, to, tokenId, eth, usd, loot })
         const message: Message = {
           from,
           to,
@@ -46,6 +45,7 @@ async function main() {
           usd,
           loot,
         }
+        console.log('Sale: ', message)
         sendDiscordMessage(message)
       }
     },
