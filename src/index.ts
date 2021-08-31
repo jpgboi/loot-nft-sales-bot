@@ -48,7 +48,7 @@ async function main() {
         }
         sendDiscordMessage(message)
       }
-    }
+    },
   )
 }
 

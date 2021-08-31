@@ -1,4 +1,8 @@
-import { MessageAttachment, WebhookClient } from 'discord.js'
+import {
+  MessageAttachment,
+  WebhookClient,
+  WebhookMessageOptions,
+} from 'discord.js'
 import { imageRarityFromItems } from 'loot-rarity'
 import svg2img from 'svg2img'
 
@@ -16,11 +20,15 @@ function shortenAddress(address: string) {
   return address.slice(0, 6) + '…' + address.slice(-4)
 }
 
+function tweakSvgColors(svg) {
+  return svg.replace(/#838383/g, '#c0c0c0')
+}
+
 // Discord doesn’t support data URI nor SVG files,
 // so we need to convert the data URI SVG into a PNG buffer.
 async function rarityImageBuffer(items: string[]): Promise<Buffer> {
   const dataUriImage = imageRarityFromItems(items)
-  const svg = decodeURIComponent(dataUriImage).split(',')[1]
+  const svg = tweakSvgColors(decodeURIComponent(dataUriImage).split(',')[1])
   return new Promise((resolve, reject) => {
     svg2img(svg, { width: 350, height: 350 }, (err, data) => {
       if (err) reject(err)
@@ -39,11 +47,13 @@ export const sendDiscordMessage = async ({
 }: Message) => {
   const attachment = new MessageAttachment(
     await rarityImageBuffer(Object.values(loot)),
-    'loot.png'
+    'loot.png',
   )
 
-  const message = {
-    username: 'Loot Sales',
+  const message: WebhookMessageOptions = {
+    username: 'Loot Market',
+    avatarURL:
+      'https://pbs.twimg.com/profile_images/1431587138202701826/lpgblc4h_400x400.jpg',
     embeds: [
       {
         title: `Bag #${tokenId}`,
