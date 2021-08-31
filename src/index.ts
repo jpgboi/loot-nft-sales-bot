@@ -61,10 +61,22 @@ const getEthUsd = async (eth: number) => {
   return (eth * parseInt(amount)).toLocaleString()
 }
 
+;(async () => {
+  try {
+    await main()
+  } catch (e) {
+    console.log(e)
+    process.exit(-1)
+  }
+  process.exit()
+})()
+
 http
   .createServer(async (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' })
+    res.write('Divine Morning!')
+    res.end()
     try {
-      await main()
     } catch (e) {
       console.log(e)
     }
