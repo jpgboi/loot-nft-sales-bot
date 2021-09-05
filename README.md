@@ -43,3 +43,12 @@ This approach has the following advantages:
 
 - `abi.json` is from the [Loot Poject](https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7)
 - `loot.json` & `rare.json` is from [dhof-loot](https://github.com/Anish-Agnihotri/dhof-loot/)
+
+# Known Errors
+
+```
+/workspace/node_modules/@ethersproject/logger/src.ts/index.ts:225
+        const error: any = new Error(message);
+                           ^
+Error: could not detect network (event="noNetwork", code=NETWORK_ERROR, version=providers/5.4.5)
+```

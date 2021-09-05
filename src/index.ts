@@ -21,38 +21,49 @@ const rpc = new providers.JsonRpcProvider(process.env.PROVIDER_URL)
 const contract = new Contract(process.env.CONTRACT_ADDRESS, abi, rpc)
 
 async function main() {
-  console.log('🚀 Listening for sales...')
-  contract.on(
-    'Transfer',
-    async (from: string, to: string, tokenIdBN: BigNumber, event: Event) => {
-      const { value: tValue } = await event.getTransaction()
-      const value = tValue.gt(0)
-        ? tValue
-        : await getWethTransfer(await event.getTransactionReceipt())
+  return new Promise((_, reject) => {
+    try {
+      console.log('🚀 Listening for sales...')
+      contract.on(
+        'Transfer',
+        async (
+          from: string,
+          to: string,
+          tokenIdBN: BigNumber,
+          event: Event,
+        ) => {
+          const { value: tValue } = await event.getTransaction()
+          const value = tValue.gt(0)
+            ? tValue
+            : await getWethTransfer(await event.getTransactionReceipt())
 
-      // make sure it was a sale and not just a transfer
-      // by checking if value is greater than 0
-      if (value.gt(0)) {
-        const tokenId = tokenIdBN.toString()
-        const loot: Loot = lootList[tokenId]
+          // make sure it was a sale and not just a transfer
+          // by checking if value is greater than 0
+          if (value.gt(0)) {
+            const tokenId = tokenIdBN.toString()
+            const loot: Loot = lootList[tokenId]
 
-        // get prices
-        const eth = utils.formatEther(value)
-        const usd = await getEthUsd(parseFloat(eth))
+            // get prices
+            const eth = utils.formatEther(value)
+            const usd = await getEthUsd(parseFloat(eth))
 
-        const message: Message = {
-          from,
-          to,
-          tokenId,
-          eth,
-          usd,
-          loot,
-        }
-        console.log('Sale: ', message)
-        sendDiscordMessage(message)
-      }
-    },
-  )
+            const message: Message = {
+              from,
+              to,
+              tokenId,
+              eth,
+              usd,
+              loot,
+            }
+            console.log('Sale: ', message)
+            sendDiscordMessage(message)
+          }
+        },
+      )
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 const getEthUsd = async (eth: number) => {
@@ -81,7 +92,7 @@ const getWethTransfer = async (
         const [f, t, value] = transaction.args
 
         // only look for the seller -> buyer txs
-        // (ignore additional transfers for fee splits)
+        // (ignore additional fee split transfers)
         if (from == t) amount = value
       }
     }
@@ -92,11 +103,12 @@ const getWethTransfer = async (
   }
 }
 
-;(async () => {
+;(async function run() {
   try {
     await main()
   } catch (e) {
-    console.log(e)
-    process.exit(-1)
+    console.error('Error in main', e)
+    console.log('Restarting...')
+    run()
   }
 })()
